@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -36,6 +37,21 @@ class ProductController extends Controller
 
     public function getDetail(Request $req){
 
+        $rules = [
+            "product_id"=>"required|integer"
+        ];
+
+        $validator = Validator::make($req->all(),$rules);
+
+        if ($validator->fails()){
+            $response = [
+                "code" => 400,
+                "message"=>$validator->errors()->first(),
+                "data"=> (object) null
+            ];
+            return response()->json($response,$response["code"]);
+        }
+
         $container = Product::where("id",$req->product_id)->first();
 
         $response = [
@@ -48,6 +64,23 @@ class ProductController extends Controller
     }
 
     public function add(Request $req){
+
+        $rules = [
+            "name"=>"required|max:200",
+            "description"=>"required|max:500",
+            "stock"=>"required|integer"
+        ];
+
+        $validator = Validator::make($req->all(),$rules);
+
+        if ($validator->fails()){
+            $response = [
+                "code" => 400,
+                "message"=>$validator->errors()->first(),
+                "data"=> (object) null
+            ];
+            return response()->json($response,$response["code"]);
+        }
         
         try {
             
@@ -123,6 +156,23 @@ class ProductController extends Controller
     }
 
     public function order(Request $req){
+
+        $rules = [
+            "product_id"=>"required|integer",
+            "email"=>"required|email",
+            "ammount"=>"required|integer"
+        ];
+
+        $validator = Validator::make($req->all(),$rules);
+
+        if ($validator->fails()){
+            $response = [
+                "code" => 400,
+                "message"=>$validator->errors()->first(),
+                "data"=> (object) null
+            ];
+            return response()->json($response,$response["code"]);
+        }
 
         $p = Product::where("id",$req->product_id)->first();
 

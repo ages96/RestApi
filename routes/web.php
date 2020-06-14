@@ -30,4 +30,21 @@ Route::prefix('api')->group(function () {
 	    	Route::post('/add', 'ContainerController@addSetting');
 		});
 	});
+
+
+
+	// Store
+	Route::prefix('product')->group(function () {
+		Route::post('/add', 'ProductController@add');
+		Route::post('/addStock', 'ProductController@addStock');
+    	Route::get('/get', 'ProductController@get');
+    	Route::get('/detail', 'ProductController@getDetail');
+    	Route::post('/order', 'ProductController@order');
+	});
+
+	// Store
+	Route::prefix('transaction')->group(function () {
+    	Route::get('/detail', 'ProductController@getTrans');
+	});
+
 });

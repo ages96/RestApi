@@ -16,3 +16,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::prefix('api')->group(function () {
+    
+    // User
+	Route::prefix('container')->group(function () {
+    	Route::get('/getParent', 'ContainerController@getSetting');
+    	Route::get('/getContainer', 'ContainerController@getContainer');
+    	Route::post('/add', 'ContainerController@add');
+
+    	// Setting
+		Route::prefix('parent')->group(function () {
+	    	Route::post('/add', 'ContainerController@addSetting');
+		});
+	});
+});
